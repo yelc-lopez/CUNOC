@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">CUNOC</string>
+    <string name="nameTransition">transicion</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="tab_text_1">Notas</string>
+    <string name="tab_text_2">Noticias</string>
+    <string name="tab_text_3">Extra</string>
+    <string name="action_settings">Settings</string>
+    <string name="Usuario">Usuario</string>
+    <string name="pin">Pin</string>
+    <string name="login">Ingresar</string>
+
+    <string-array name="titles">
+        <item>Codigo</item>
+        <item>Curso</item>
+        <item>Zona</item>
+        <item>Final</item>
+        <item>Total</item>
+        <item>Perfil</item>
+    </string-array>
+
+    <string name="info">Datos De Articulo</string>
+    <string name="title">Titulo De Articulo</string>
+
+</resources>
+
