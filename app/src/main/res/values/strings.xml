@@ -22,5 +22,8 @@
     <string name="info">Datos De Articulo</string>
     <string name="title">Titulo De Articulo</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
 

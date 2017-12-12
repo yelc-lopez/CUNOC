@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -30,7 +32,8 @@ public class NoticiasFragment extends Fragment {
 
 
     ListView listaArticulos;
-    ImageView imageView;
+    LottieAnimationView lottieAnimationView;
+
     public NoticiasFragment() {
         // Required empty public constructor
     }
@@ -42,17 +45,22 @@ public class NoticiasFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_noticias, container, false);
         listaArticulos = view.findViewById(R.id.listaArticulos);
-        imageView = view.findViewById(R.id.imagenConexion);
+        lottieAnimationView = view.findViewById(R.id.animacionDescarga);
 
-        imageView.setOnClickListener(new View.OnClickListener() {
+        lottieAnimationView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                lottieAnimationView.setClickable(false);
                 new CunocPage().execute();
             }
         });
 
+        try {
+            new CunocPage().execute();
 
-        new CunocPage().execute();
+        }catch (Exception e){
+            Log.i("Error en pagina ", e.getMessage());
+        }
 
         return view;
     }
@@ -65,6 +73,13 @@ public class NoticiasFragment extends Fragment {
         String tituloArticulo, infoArticulo, rutaImagen;    //variables temporales
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            lottieAnimationView.setVisibility(View.VISIBLE);
+            lottieAnimationView.playAnimation();
+        }
+
+        @Override
         protected Void doInBackground(Void... voids) {
             try{
                 Document doc = Jsoup.connect(paginaWeb).get();
@@ -74,7 +89,7 @@ public class NoticiasFragment extends Fragment {
                 Elements titulos = articulos.select("h2");
                 Elements articulo;
                 for (int i = 0; i <titulos.size()-1 ; i++) {
-                    Log.i("Titulo = ", titulos.get(i).text());
+                  //  Log.i("Titulo = ", titulos.get(i).text());
                     tituloArticulo = titulos.get(i).text();
                     if (i==0){
                         articulo = articulos.select("div.leading-0");
@@ -86,14 +101,14 @@ public class NoticiasFragment extends Fragment {
                     Elements contenido = articulo.select("p span");
                     infoArticulo="";
                     for (int j = 0; j < contenido.size()-2; j++) {
-                        Log.i("Contenido ", contenido.get(j).text());
+                        //Log.i("Contenido ", contenido.get(j).text());
                         infoArticulo += contenido.get(j).text() + "\n";
 
-                        Log.i("info ",infoArticulo);
+                       // Log.i("info ",infoArticulo);
                     }
 
                     Elements png = articulo.select("img[src$=.jpg]");
-                    Log.i("Imagen = ",paginaWeb+png.attr("src"));
+                   // Log.i("Imagen = ",paginaWeb+png.attr("src"));
                     rutaImagen = paginaWeb+png.attr("src");
 
 
@@ -121,12 +136,12 @@ public class NoticiasFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             if (!Articulos.isEmpty()){
-                imageView.setVisibility(View.INVISIBLE);
+                lottieAnimationView.setVisibility(View.INVISIBLE);
                 ArticuloAdapter adapter = new ArticuloAdapter(getContext(),Articulos);
                 listaArticulos.setAdapter(adapter);
             }else{
-                imageView.setVisibility(View.VISIBLE);
-                Toast.makeText(getContext(),"No tienes conexion a internet",Toast.LENGTH_SHORT).show();
+                lottieAnimationView.setVisibility(View.VISIBLE);
+                Toast.makeText(getContext(),"No Se Puede Descargar El contenido",Toast.LENGTH_SHORT).show();
             }
         }
     }

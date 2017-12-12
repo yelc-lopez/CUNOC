@@ -18,6 +18,8 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -38,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
 
     TextInputEditText user, pin;
     Button loguearse;
+    LottieAnimationView lottieAnimationView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,18 +53,16 @@ public class LoginActivity extends AppCompatActivity {
         user = findViewById(R.id.edit_text_user);
         pin = findViewById(R.id.edit_text_pin);
         loguearse = findViewById(R.id.btn_loguearse);
-
+        lottieAnimationView = findViewById(R.id.animacionProgress);
 
         loguearse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               new IniciarSesionWS().execute();
+                loguearse.setClickable(false);
+                new IniciarSesionWS().execute();
             }
         });
-
-
         transicionEntrada();
-
     }
 
 
@@ -76,23 +78,29 @@ public class LoginActivity extends AppCompatActivity {
             if (networkInfo == null || !networkInfo.isConnected() ||
                     (networkInfo.getType() != ConnectivityManager.TYPE_WIFI
                             && networkInfo.getType() != ConnectivityManager.TYPE_MOBILE)) {
-                Toast.makeText(getApplicationContext(),"CONECTESE A UNA RED WIFI O ACTIVE LOS DATOS",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"ERROR EN CONEXION",Toast.LENGTH_LONG).show();
                 cancel(true);
-            }
-
-            if (user.getText().toString().isEmpty()){
+                loguearse.setClickable(true);
+            } else if (user.getText().toString().isEmpty()){
                 user.setError("Usuario Obligatorio");
                 cancel(true);
-            }else if (pin.getText().toString().isEmpty()){
+                loguearse.setClickable(true);
+            } else if (pin.getText().toString().isEmpty()){
                 pin.setError("pin no puede ser nulo");
                 cancel(true);
+                loguearse.setClickable(true);
+            }else{
+                lottieAnimationView.setVisibility(View.VISIBLE);
+                lottieAnimationView.playAnimation();
+                lottieAnimationView.setMinAndMaxFrame(0,100);
             }
         }
 
         @Override
         protected String doInBackground(Void... voids) {
            String resultString = "";
-            String url_= "http://192.168.1.7/WebServiceAndroid/getDatos.php";
+            //String url_= "http://192.168.1.7/WebServiceAndroid/getDatos.php";
+            String url_ = "http://testcunoc.000webhostapp.com//getDatos.php";
                 URL url = null;
                 try {
                     url = new URL(url_);
@@ -110,6 +118,8 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String respuesta) {
             try {
+
+                Log.i("respuesta ", respuesta);
                 JSONArray jsonArray = new JSONArray(respuesta);
                 Log.d("job ",jsonArray.toString());
                 Log.d("tamaño",String.valueOf(jsonArray.length()));
@@ -125,14 +135,15 @@ public class LoginActivity extends AppCompatActivity {
                     nextActivity(MainActivity.class,datosAlumno);
 
                 }else{
-                    Toast.makeText(getApplicationContext(),"USUARIO NO REGISTRADO O DATOS INCORRECTOS",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"Revise Los Datos",Toast.LENGTH_LONG).show();
+                    lottieAnimationView.setVisibility(View.INVISIBLE);
                 }
 
             } catch (JSONException e) {
                 Log.d("error " , e.getMessage());
-            }catch (Exception e){
-                e.printStackTrace();
+                lottieAnimationView.setVisibility(View.INVISIBLE);
             }
+            loguearse.setClickable(true);
         }
 
         /**
@@ -147,8 +158,8 @@ public class LoginActivity extends AppCompatActivity {
             String result = "";
             try {
                 connection = (HttpURLConnection) url.openConnection();
-                connection.setReadTimeout(3000);
-                connection.setConnectTimeout(3000);
+                connection.setReadTimeout(5000);
+                connection.setConnectTimeout(5000);
                 connection.setDoInput(true);
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Lenght",""+Integer.toString(parametros.getBytes().length));
@@ -217,6 +228,7 @@ public class LoginActivity extends AppCompatActivity {
     public void nextActivity(Class activity, Bundle datos){
         Intent intent = new Intent(getApplicationContext(),activity);
         intent.putExtras(datos);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         if  (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             getWindow().setExitTransition(new Slide(Gravity.RIGHT).setInterpolator(new DecelerateInterpolator()).setDuration(1000));
             startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle());

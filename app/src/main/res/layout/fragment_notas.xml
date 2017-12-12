@@ -3,6 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/fragmentNotas"
     tools:context="gt.edu.cunoc.cunoc.Fragments.NotasFragment">
 
 

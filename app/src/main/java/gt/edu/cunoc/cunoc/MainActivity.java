@@ -1,7 +1,6 @@
 package gt.edu.cunoc.cunoc;
 
-import android.content.Context;
-import android.content.Intent;
+
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,34 +13,28 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
-import android.widget.TextView;
 
+import android.widget.TableLayout;
+
+
+import gt.edu.cunoc.cunoc.Adapters.FragmentsAdapters;
 import gt.edu.cunoc.cunoc.Fragments.NotasFragment;
 import gt.edu.cunoc.cunoc.Fragments.NoticiasFragment;
+import gt.edu.cunoc.cunoc.Interfaces.SeleccionCarrera;
 
-public class MainActivity extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+public class MainActivity extends AppCompatActivity implements SeleccionCarrera{
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
+    private FragmentsAdapters mSectionsPagerAdapter;
+
     private ViewPager mViewPager;
     private  Bundle datosRecividos;
+    TableLayout tabla;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        mSectionsPagerAdapter = new FragmentsAdapters(getSupportFragmentManager(),"1","1");
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -72,8 +64,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        datosRecividos = getIntent().getExtras();
-        Log.i("valorRecivido " , datosRecividos.getString("id_alumno0"));
+
+        if (getIntent().getExtras() != null){
+            datosRecividos = getIntent().getExtras();
+            Log.i("AlumnoRecivido " , datosRecividos.getString("id_alumno0"));
+            Log.i("CarreraRecivido " , datosRecividos.getString("id_carrera0"));
+        }
+
     }
 
 
@@ -86,47 +83,62 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            try{
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void idCarrera(String id_alumno, String id_carrera) {
+    }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+    public class FragmentsAdaptersV2 extends FragmentPagerAdapter {
+
+        String id_usuario, id_carrera;
+
+        public FragmentsAdaptersV2(FragmentManager fm) {
             super(fm);
+        }
+
+        public FragmentsAdaptersV2(FragmentManager fm, String id_usuario, String id_carrera) {
+            super(fm);
+            this.id_usuario = id_usuario;
+            this.id_carrera = id_carrera;
+            Log.i("valor aaa ", id_usuario);
+            Log.i("valor ccc ", id_carrera);
         }
 
         @Override
         public Fragment getItem(int position) {
             switch (position){
                 case 0:
-                    return new NotasFragment(datosRecividos.getString("id_alumno0"),datosRecividos.getString("id_carrera0"));
+                    NotasFragment notasFragment = new NotasFragment();
+                    if (id_usuario!=null && id_carrera!=null){
+                        Bundle bundle = new Bundle();
+                        bundle.putString("id_usuario",id_usuario);
+                        bundle.putString("id_carrera",id_carrera);
+                        notasFragment.setArguments(bundle);
+                    }
+                    return notasFragment;
                 case 1:
-                    return new NoticiasFragment();
+                    return new NotasFragment();
                 case 2:
                     return new NotasFragment();
             }
-
             return null;
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
             return 3;
         }
 
@@ -134,14 +146,15 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return getResources().getString(R.string.tab_text_1);
+                    return "Notas";
                 case 1:
-                    return getResources().getString(R.string.tab_text_2);
+                    return "Noticias";
                 case 2:
-                    return getResources().getString(R.string.tab_text_3);
+                    return "Extras";
             }
             return null;
         }
 
     }
+
 }

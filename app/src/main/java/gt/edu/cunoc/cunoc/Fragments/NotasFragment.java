@@ -32,6 +32,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import gt.edu.cunoc.cunoc.Interfaces.SeleccionCarrera;
 import gt.edu.cunoc.cunoc.MainActivity;
 import gt.edu.cunoc.cunoc.Models.Nota;
 import gt.edu.cunoc.cunoc.R;
@@ -39,18 +40,13 @@ import gt.edu.cunoc.cunoc.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NotasFragment extends Fragment {
+public class NotasFragment extends Fragment implements SeleccionCarrera {
 
     TableLayout tabladatos;
     private String alumno = "", carrera = "";
 
     public NotasFragment() {
         // Required empty public constructor
-    }
-
-    public NotasFragment(String alumno, String carrera) {
-        this.alumno = alumno;
-        this.carrera = carrera;
     }
 
 
@@ -62,11 +58,26 @@ public class NotasFragment extends Fragment {
         // reference UI
         tabladatos = view.findViewById(R.id.tablaDatos);
 
-        if (!alumno.isEmpty() && !carrera.isEmpty()){
-            new getNotas().execute();
-        }
+try{
+    if (getArguments()!=null){
+        Log.i("valorers ", getArguments().toString());
+        alumno = getArguments().getString("id_usuario");
+        carrera = getArguments().getString("id_carrera");
+        new getNotas().execute();
+    }
+}catch (Exception e){
+    Log.i("error en f ",e.getMessage());
+}
+
 
         return view;
+    }
+
+
+    @Override
+    public void idCarrera(String id_alumno, String id_carrera) {
+        Log.i("inAlumno", String.valueOf(id_alumno));
+        Log.i("inCarrera", String.valueOf(id_carrera));
     }
 
     public class getNotas extends AsyncTask<Void,Void,String> {
@@ -88,7 +99,9 @@ public class NotasFragment extends Fragment {
         @Override
         protected String doInBackground(Void... voids) {
             String resultString = "";
-            String url_= "http://192.168.1.7/WebServiceAndroid/getNotas.php";
+            //String url_= "http://192.168.1.7/WebServiceAndroid/getNotas.php";
+            //String url_ = "http://testcunoc.000webhostapp.com//getNotas.php";
+            String url_ = "http://testcunoc.000webhostapp.com//getNotas.php";
             URL url = null;
             try {
                 url = new URL(url_);
@@ -155,8 +168,8 @@ public class NotasFragment extends Fragment {
             String result = "";
             try {
                 connection = (HttpURLConnection) url.openConnection();
-                connection.setReadTimeout(3000);
-                connection.setConnectTimeout(3000);
+                connection.setReadTimeout(5000);
+                connection.setConnectTimeout(5000);
                 connection.setDoInput(true);
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Lenght",""+Integer.toString(parametros.getBytes().length));
@@ -215,9 +228,6 @@ public class NotasFragment extends Fragment {
         }
 
     }
-
-
-
 
     public void notasCursos(ArrayList<Nota> notas){
         for (int i = 0; i < notas.size(); i++) {
