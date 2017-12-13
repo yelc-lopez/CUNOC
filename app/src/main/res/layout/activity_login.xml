@@ -29,9 +29,9 @@
             android:inputType="text"
             android:paddingLeft="@dimen/space_input"
             android:paddingRight="@dimen/space_input"
-            android:text="269014-10997"
+            android:text="269014"
             android:textColor="@color/colorPrimary"
-            android:textColorHint="@color/colorAccent"
+            android:textColorHint="@color/colorhint"
             android:textSize="24sp" />
     </android.support.design.widget.TextInputLayout>
 
@@ -55,21 +55,25 @@
             android:inputType="numberPassword"
             android:paddingLeft="@dimen/space_input"
             android:paddingRight="@dimen/space_input"
-            android:text="789123"
+            android:textAlignment="textStart"
             android:textColor="@color/colorPrimary"
-            android:textColorHint="@color/colorAccent"
+            android:textColorHint="@color/colorhint"
             android:textSize="24sp" />
     </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/btn_loguearse"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
+        android:background="@color/colorPrimary"
         android:elevation="15dp"
         android:text="@string/login"
+        android:textAlignment="center"
+        android:textSize="18sp"
         android:theme="@style/styleRaizeButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,11 +82,11 @@
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animacionProgress"
         android:layout_width="match_parent"
-        android:layout_height="200px"
+        android:layout_height="150dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -91,8 +95,7 @@
         app:lottie_autoPlay="false"
         app:lottie_colorFilter="@color/colorPrimary"
         app:lottie_fileName="animation-w800-h600.json"
-        app:lottie_loop="true"
-        />
+        app:lottie_loop="true" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements NotasInteractionL
 
         for (int i = 0; i < items; i++) {
             if (id==i){
-                Toast.makeText(getApplicationContext(),datosRecividos.getString("Actualizando"+i),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Actualizando",Toast.LENGTH_SHORT).show();
                 // Crea el nuevo fragmento y la transacción.
                 notasFragment.peticionNotasWS(datosRecividos.getString("id_alumno"+i),datosRecividos.getString("id_carrera"+i));
             }

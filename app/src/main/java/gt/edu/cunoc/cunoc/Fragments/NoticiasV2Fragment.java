@@ -32,8 +32,6 @@ public class NoticiasV2Fragment extends Fragment {
     private RecyclerView listaRecycler;
     private LottieAnimationView lottieAnimationView;
 
-
-
     public NoticiasV2Fragment() {
         // Required empty public constructor
     }
