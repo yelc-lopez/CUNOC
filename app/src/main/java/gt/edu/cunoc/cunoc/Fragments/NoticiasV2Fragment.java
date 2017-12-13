@@ -56,7 +56,12 @@ public class NoticiasV2Fragment extends Fragment {
         listaRecycler = view.findViewById(R.id.listaRecycler);
         lottieAnimationView = view.findViewById(R.id.animacionDownloader);
 
-        new CunocPage().execute();
+                try {
+                    new CunocPage().execute();
+                }catch (Exception e){
+                    Toast.makeText(getActivity(),"Error Noticias - " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
 
         return view;
 

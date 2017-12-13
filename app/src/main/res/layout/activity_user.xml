@@ -26,23 +26,24 @@
 
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/circleImageView"
+        android:id="@+id/circleImagViewPerfil"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         android:elevation="15dp"
         android:src="@drawable/perfil"
         app:layout_anchor="@+id/appbar"
+        android:scaleType="centerCrop"
         app:layout_anchorGravity="bottom|center" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textViewName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:elevation="20dp"
         android:text="@string/alumno1"
-        android:textSize="25dp"
-        android:elevation="15dp"
         android:textColor="@color/colorPrimary"
-        app:layout_anchor="@+id/circleImageView"
+        android:textSize="25dp"
+        app:layout_anchor="@+id/circleImagViewPerfil"
         app:layout_anchorGravity="bottom|center" />
 
 </android.support.design.widget.CoordinatorLayout>

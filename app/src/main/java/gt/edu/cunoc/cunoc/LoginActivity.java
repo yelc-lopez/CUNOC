@@ -60,7 +60,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loguearse.setClickable(false);
-                new IniciarSesionWS().execute();
+                try {
+                    new IniciarSesionWS().execute();
+                }catch (Exception e){
+                    Toast.makeText(getApplicationContext(),"Error Loguin - " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
         transicionEntrada();
@@ -106,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     url = new URL(url_);
                     // ejecutar url con parametros
-                    resultString = downloadUrl(url,/*user.getText().toString(),pin.getText().toString()*/"269014-10997","789123");
+                    resultString = downloadUrl(url,user.getText().toString(),pin.getText().toString());
                     return resultString;
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -133,6 +137,9 @@ public class LoginActivity extends AppCompatActivity {
                         datosAlumno.putString("id_alumno"+i,jsonArray.getJSONObject(i).getString("id_alumno"));
                         datosAlumno.putString("id_carrera"+i,jsonArray.getJSONObject(i).getString("id_carrera"));
                         datosAlumno.putString("nombre_carrera"+i,jsonArray.getJSONObject(i).getString("nombre_carrera"));
+                        datosAlumno.putString("nombre", jsonArray.getJSONObject(i).getString("nombre"));
+                        datosAlumno.putString("apellido", jsonArray.getJSONObject(i).getString("apellido"));
+                        datosAlumno.putString("urlImagen", jsonArray.getJSONObject(i).getString("urlImagen"));
                     }
                     nextActivity(MainActivity.class,datosAlumno);
 
@@ -231,12 +238,12 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(),activity);
         intent.putExtras(datos);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        if  (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+        /**if  (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             getWindow().setExitTransition(new Fade(Fade.MODE_OUT).setInterpolator(new DecelerateInterpolator()).setDuration(1000));
             startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle());
-        }else{
+        }else{*/
             startActivity(intent);
-        }
+       // }
     }
 
 }

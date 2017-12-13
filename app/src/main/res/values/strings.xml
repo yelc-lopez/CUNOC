@@ -134,6 +134,8 @@ El Doctorado, además, de su implícita calidad académica, persigue el cultivo 
     </string>
     <string name="alumno1">Wendy Gonzalez</string>
     <string name="transitionName">trancision</string>
+    <string name="information">Usuario</string>
+    <string name="close_session">Cerrar Sesion</string>
 
 </resources>
 

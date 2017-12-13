@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import gt.edu.cunoc.cunoc.Interfaces.NotasInteractionListener;
+import gt.edu.cunoc.cunoc.LoginActivity;
 import gt.edu.cunoc.cunoc.Models.Nota;
 import gt.edu.cunoc.cunoc.R;
 
@@ -72,7 +73,12 @@ public class NotasFragment extends Fragment {
 
 
         if (getArguments()!=null) {
-            new getNotas().execute();
+            try {
+                new getNotas().execute();
+            }catch (Exception e){
+                Toast.makeText(getActivity(),"Error Notas - " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
             if (mListener != null) {
                 mListener.onFragmentInteraction(this);
             }
@@ -83,7 +89,11 @@ public class NotasFragment extends Fragment {
     public void peticionNotasWS(String alumno , String carrera){
         this.alumno = alumno;
         this.carrera = carrera;
-        new getNotas().execute();
+        try {
+            new getNotas().execute();
+        }catch (Exception e){
+            Toast.makeText(getActivity(),"Error Notas - " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -113,7 +123,6 @@ public class NotasFragment extends Fragment {
         protected String doInBackground(Void... voids) {
             String resultString = "";
             //String url_= "http://192.168.1.7/WebServiceAndroid/getNotas.php";
-            //String url_ = "http://testcunoc.000webhostapp.com//getNotas.php";
             String url_ = "http://testcunoc.000webhostapp.com//getNotas.php";
             URL url = null;
             try {
