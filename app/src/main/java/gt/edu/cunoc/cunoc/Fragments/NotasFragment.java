@@ -17,6 +17,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -32,18 +34,17 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import gt.edu.cunoc.cunoc.Interfaces.SeleccionCarrera;
-import gt.edu.cunoc.cunoc.MainActivity;
+import gt.edu.cunoc.cunoc.Interfaces.NotasInteractionListener;
 import gt.edu.cunoc.cunoc.Models.Nota;
 import gt.edu.cunoc.cunoc.R;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class NotasFragment extends Fragment implements SeleccionCarrera {
 
-    TableLayout tabladatos;
+public class NotasFragment extends Fragment {
+
+    private TableLayout tabladatos;
     private String alumno = "", carrera = "";
+    private NotasInteractionListener mListener;
+    private LottieAnimationView lottieAnimationView;
 
     public NotasFragment() {
         // Required empty public constructor
@@ -51,34 +52,40 @@ public class NotasFragment extends Fragment implements SeleccionCarrera {
 
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            Log.i("valorers ", getArguments().toString());
+            alumno = getArguments().getString("id_usuario");
+            carrera = getArguments().getString("id_carrera");
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
          View view = inflater.inflate(R.layout.fragment_notas, container, false);
-        // reference UI
+        // UI reference
         tabladatos = view.findViewById(R.id.tablaDatos);
-
-try{
-    if (getArguments()!=null){
-        Log.i("valorers ", getArguments().toString());
-        alumno = getArguments().getString("id_usuario");
-        carrera = getArguments().getString("id_carrera");
-        new getNotas().execute();
-    }
-}catch (Exception e){
-    Log.i("error en f ",e.getMessage());
-}
+        lottieAnimationView = view.findViewById(R.id.animacionDownloaderNotas);
 
 
+        if (getArguments()!=null) {
+            new getNotas().execute();
+            if (mListener != null) {
+                mListener.onFragmentInteraction(this);
+            }
+        }
         return view;
     }
 
-
-    @Override
-    public void idCarrera(String id_alumno, String id_carrera) {
-        Log.i("inAlumno", String.valueOf(id_alumno));
-        Log.i("inCarrera", String.valueOf(id_carrera));
+    public void peticionNotasWS(String alumno , String carrera){
+        this.alumno = alumno;
+        this.carrera = carrera;
+        new getNotas().execute();
     }
+
 
     public class getNotas extends AsyncTask<Void,Void,String> {
 
@@ -91,9 +98,15 @@ try{
             if (networkInfo == null || !networkInfo.isConnected() ||
                     (networkInfo.getType() != ConnectivityManager.TYPE_WIFI
                             && networkInfo.getType() != ConnectivityManager.TYPE_MOBILE)) {
-                Toast.makeText(getContext(),"CONECTESE A UNA RED WIFI O ACTIVE LOS DATOS",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"Error En Conexion",Toast.LENGTH_LONG).show();
                 cancel(true);
+            }else{
+                tabladatos.removeAllViews();
+                lottieAnimationView.setVisibility(View.VISIBLE);
+                lottieAnimationView.playAnimation();
             }
+
+
         }
 
         @Override
@@ -144,13 +157,14 @@ try{
                     }
                     llenarfila(titulos, Color.RED);
                     notasCursos(notas);
-
+                    lottieAnimationView.setVisibility(View.INVISIBLE);
                 }else{
                     Toast.makeText(getContext(),"NO SE HA PODIDO DESCARGAR LOS DATOS",Toast.LENGTH_LONG).show();
+                    lottieAnimationView.setVisibility(View.VISIBLE);
                 }
-
             } catch (JSONException e) {
                 Log.d("error " , e.getMessage());
+                lottieAnimationView.setVisibility(View.VISIBLE);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -239,7 +253,7 @@ try{
     public void llenarfila(ArrayList<String> datosFila, int color){
         TableRow fila = new TableRow(getContext());
         TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
-        params.setMargins(5,5,5,5);
+        params.setMargins(5,15,5,15);
         TextView txt;
 
         for (int i = 0; i < datosFila.size(); i++) {
@@ -252,4 +266,24 @@ try{
 
         tabladatos.addView(fila);
     }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof NotasInteractionListener) {
+            mListener = (NotasInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+
 }

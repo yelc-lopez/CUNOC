@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/tamanio_cards"
-    android:layout_marginTop="20dp">
+    android:layout_marginTop="5dp">
 
 
         <RelativeLayout
@@ -20,12 +20,12 @@
                 android:layout_alignParentTop="true"
                 android:scaleType="centerCrop"
                 android:src="@drawable/doctorado_cunoc_foto_1"
-                android:transitionName="@string/noticia1" />
+                android:transitionName="@string/transitionName" />
 
             <TextView
                 android:id="@+id/tituloTarjeta"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"

@@ -10,6 +10,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Fade;
 import android.transition.Slide;
 import android.util.Log;
 import android.view.Gravity;
@@ -131,6 +132,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("valor", jsonArray.getJSONObject(i).getString("id_alumno"));
                         datosAlumno.putString("id_alumno"+i,jsonArray.getJSONObject(i).getString("id_alumno"));
                         datosAlumno.putString("id_carrera"+i,jsonArray.getJSONObject(i).getString("id_carrera"));
+                        datosAlumno.putString("nombre_carrera"+i,jsonArray.getJSONObject(i).getString("nombre_carrera"));
                     }
                     nextActivity(MainActivity.class,datosAlumno);
 
@@ -230,7 +232,7 @@ public class LoginActivity extends AppCompatActivity {
         intent.putExtras(datos);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         if  (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            getWindow().setExitTransition(new Slide(Gravity.RIGHT).setInterpolator(new DecelerateInterpolator()).setDuration(1000));
+            getWindow().setExitTransition(new Fade(Fade.MODE_OUT).setInterpolator(new DecelerateInterpolator()).setDuration(1000));
             startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle());
         }else{
             startActivity(intent);

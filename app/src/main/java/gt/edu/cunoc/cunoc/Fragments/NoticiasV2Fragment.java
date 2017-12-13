@@ -4,11 +4,11 @@ package gt.edu.cunoc.cunoc.Fragments;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -20,56 +20,60 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 
 import gt.edu.cunoc.cunoc.Adapters.ArticuloAdapter;
+import gt.edu.cunoc.cunoc.Adapters.NoticiaAdapterCard;
 import gt.edu.cunoc.cunoc.Models.Articulo;
 import gt.edu.cunoc.cunoc.R;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NoticiasFragment extends Fragment {
+public class NoticiasV2Fragment extends Fragment {
+
+    private RecyclerView listaRecycler;
+    private LottieAnimationView lottieAnimationView;
 
 
-    ListView listaArticulos;
-    LottieAnimationView lottieAnimationView;
 
-    public NoticiasFragment() {
+    public NoticiasV2Fragment() {
         // Required empty public constructor
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_noticias, container, false);
-        listaArticulos = view.findViewById(R.id.listaArticulos);
-        lottieAnimationView = view.findViewById(R.id.animacionDescarga);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        lottieAnimationView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                lottieAnimationView.setClickable(false);
-                new CunocPage().execute();
-            }
-        });
-
-        try {
-            new CunocPage().execute();
-
-        }catch (Exception e){
-            Log.i("Error en pagina ", e.getMessage());
-        }
-
-        return view;
     }
 
 
+            @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_noticias_v2, container, false);
+
+        // UIReferences
+        listaRecycler = view.findViewById(R.id.listaRecycler);
+        lottieAnimationView = view.findViewById(R.id.animacionDownloader);
+
+        new CunocPage().execute();
+
+        return view;
+
+    }
+
+    public ArrayList<Articulo> tarjetas(){
+        ArrayList<Articulo> lista = new ArrayList<>();
+        lista.add(new Articulo(getResources().getString(R.string.noticia1),getResources().getString(R.string.articulo1),"http://www.cunoc.edu.gt/images/Doctorado_Cunoc_foto_2.jpg"));
+        lista.add(new Articulo(getResources().getString(R.string.noticia2),getResources().getString(R.string.articulo1),"http://www.cunoc.edu.gt/images/Ingenier%C3%ADa_estudiantes1.jpg"));
+        return lista;
+    }
+
     public class CunocPage extends AsyncTask<Void, Void, Void> {
 
-        String paginaWeb="http://cunoc.edu.gt";
-        ArrayList<Articulo> Articulos = new ArrayList<>();
-        String tituloArticulo, infoArticulo, rutaImagen;    //variables temporales
+        private static final String PAGINAWEB = "http://cunoc.edu.gt";
+        private ArrayList<Articulo> Articulos = new ArrayList<>();
+        private String tituloArticulo, infoArticulo, rutaImagen;    //variables temporales
 
         @Override
         protected void onPreExecute() {
@@ -81,14 +85,14 @@ public class NoticiasFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... voids) {
             try{
-                Document doc = Jsoup.connect(paginaWeb).get();
+                Document doc = Jsoup.connect(PAGINAWEB).get();
 
                 // Obtener Articulos
                 Elements articulos = doc.select("div#articulos");
                 Elements titulos = articulos.select("h2");
                 Elements articulo;
                 for (int i = 0; i <titulos.size()-1 ; i++) {
-                  //  Log.i("Titulo = ", titulos.get(i).text());
+                    //  Log.i("Titulo = ", titulos.get(i).text());
                     tituloArticulo = titulos.get(i).text();
                     if (i==0){
                         articulo = articulos.select("div.leading-0");
@@ -103,12 +107,12 @@ public class NoticiasFragment extends Fragment {
                         //Log.i("Contenido ", contenido.get(j).text());
                         infoArticulo += contenido.get(j).text() + "\n";
 
-                       // Log.i("info ",infoArticulo);
+                        // Log.i("info ",infoArticulo);
                     }
 
                     Elements png = articulo.select("img[src$=.jpg]");
-                   // Log.i("Imagen = ",paginaWeb+png.attr("src"));
-                    rutaImagen = paginaWeb+png.attr("src");
+                    // Log.i("Imagen = ",paginaWeb+png.attr("src"));
+                    rutaImagen = PAGINAWEB+png.attr("src");
 
 
                     // agregar a la lista de articulos
@@ -136,8 +140,11 @@ public class NoticiasFragment extends Fragment {
             super.onPostExecute(aVoid);
             if (!Articulos.isEmpty()){
                 lottieAnimationView.setVisibility(View.INVISIBLE);
-                ArticuloAdapter adapter = new ArticuloAdapter(getContext(),Articulos);
-                listaArticulos.setAdapter(adapter);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+                linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                listaRecycler.setLayoutManager(linearLayoutManager);
+                NoticiaAdapterCard noticias = new NoticiaAdapterCard(Articulos,R.layout.card_noticias,getActivity());
+                listaRecycler.setAdapter(noticias);
             }else{
                 lottieAnimationView.setVisibility(View.VISIBLE);
                 Toast.makeText(getContext(),"No Se Puede Descargar El contenido",Toast.LENGTH_SHORT).show();

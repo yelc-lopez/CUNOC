@@ -133,6 +133,7 @@ El Doctorado, además, de su implícita calidad académica, persigue el cultivo 
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="alumno1">Wendy Gonzalez</string>
+    <string name="transitionName">trancision</string>
 
 </resources>
 

@@ -1,20 +1,15 @@
 package gt.edu.cunoc.cunoc.Adapters;
 
 
-
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import gt.edu.cunoc.cunoc.Fragments.AlumnoFragment;
-import gt.edu.cunoc.cunoc.Fragments.ExtraFragment;
 import gt.edu.cunoc.cunoc.Fragments.NotasFragment;
-import gt.edu.cunoc.cunoc.Fragments.NoticiasFragment;
-import gt.edu.cunoc.cunoc.R;
+import gt.edu.cunoc.cunoc.Fragments.NoticiasV2Fragment;
 
 /**
  * Created by yelc on 11/12/17.
@@ -49,7 +44,7 @@ public class FragmentsAdapters extends FragmentPagerAdapter {
                 }
                 return notasFragment;
             case 1:
-                return new NoticiasFragment();
+                return new NoticiasV2Fragment();
             case 2:
                 return new AlumnoFragment();
         }

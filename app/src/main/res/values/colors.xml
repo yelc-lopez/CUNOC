@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#00274e</color>
-    <color name="colorPrimaryDark">#00274e</color>
-    <color name="colorAccent">#01b634</color>
-    <color name="colorFondoCard">#72000000</color>
+    <color name="colorPrimaryDark">#000026</color>
+    <color name="colorAccent">#374f7a</color>
+    <color name="colorFondoCard">#7400274e</color>
+
 </resources>
