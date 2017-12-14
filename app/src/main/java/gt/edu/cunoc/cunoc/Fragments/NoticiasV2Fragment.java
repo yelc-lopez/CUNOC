@@ -36,15 +36,7 @@ public class NoticiasV2Fragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-
-            @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -65,12 +57,6 @@ public class NoticiasV2Fragment extends Fragment {
 
     }
 
-    public ArrayList<Articulo> tarjetas(){
-        ArrayList<Articulo> lista = new ArrayList<>();
-        lista.add(new Articulo(getResources().getString(R.string.noticia1),getResources().getString(R.string.articulo1),"http://www.cunoc.edu.gt/images/Doctorado_Cunoc_foto_2.jpg"));
-        lista.add(new Articulo(getResources().getString(R.string.noticia2),getResources().getString(R.string.articulo1),"http://www.cunoc.edu.gt/images/Ingenier%C3%ADa_estudiantes1.jpg"));
-        return lista;
-    }
 
     public class CunocPage extends AsyncTask<Void, Void, Void> {
 
@@ -122,6 +108,7 @@ public class NoticiasV2Fragment extends Fragment {
                     Articulos.add(new Articulo(
                             tituloArticulo,
                             infoArticulo,
+                            rutaImagen,
                             rutaImagen
                     ));
                 }

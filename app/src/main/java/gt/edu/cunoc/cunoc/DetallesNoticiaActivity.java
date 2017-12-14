@@ -14,6 +14,9 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import gt.edu.cunoc.cunoc.Models.Dato;
 
@@ -58,9 +61,14 @@ public class DetallesNoticiaActivity extends AppCompatActivity {
 
     // modificarDatos de acuerdo a los parametros recibidos
     public void updateDatos(){
-        imageView.setImageBitmap(dato.getImagen());
         textViewContenido.setText(dato.getDetalle());
         textViewTitulo.setText(dato.getTitulo());
+        if (dato.getRutaImagen().equals("")){
+            imageView.setImageBitmap(dato.getImagen());
+        }else{
+            Glide.with(this).load(dato.getRutaImagen()).into(imageView);
+        }
+
     }
 
 

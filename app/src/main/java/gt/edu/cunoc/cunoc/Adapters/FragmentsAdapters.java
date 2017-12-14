@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
-import gt.edu.cunoc.cunoc.Fragments.AlumnoFragment;
+import gt.edu.cunoc.cunoc.Fragments.AsignacionesFragment;
 import gt.edu.cunoc.cunoc.Fragments.NotasFragment;
 import gt.edu.cunoc.cunoc.Fragments.NoticiasV2Fragment;
 
@@ -17,36 +17,32 @@ import gt.edu.cunoc.cunoc.Fragments.NoticiasV2Fragment;
 
 public class FragmentsAdapters extends FragmentPagerAdapter {
 
-    String id_usuario, id_carrera;
+    Bundle datosNotas = null;
+    Bundle datosCursos = null;
 
     public FragmentsAdapters(FragmentManager fm) {
         super(fm);
     }
 
-    public FragmentsAdapters(FragmentManager fm, String id_usuario, String id_carrera) {
+    public FragmentsAdapters(FragmentManager fm, Bundle datosNotas, Bundle datosCursos) {
         super(fm);
-        this.id_usuario = id_usuario;
-        this.id_carrera = id_carrera;
-        Log.i("valor aaa ", id_usuario);
-        Log.i("valor ccc ", id_carrera);
+        this.datosNotas = datosNotas;
+        this.datosCursos = datosCursos;
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                NotasFragment notasFragment = new NotasFragment();
-                if (id_usuario!=null && id_carrera!=null){
-                Bundle bundle = new Bundle();
-                bundle.putString("id_usuario",id_usuario);
-                bundle.putString("id_carrera",id_carrera);
-                notasFragment.setArguments(bundle);
-                }
+                NotasFragment notasFragment =  new NotasFragment();
+                notasFragment.setArguments(datosNotas);
                 return notasFragment;
             case 1:
                 return new NoticiasV2Fragment();
             case 2:
-                return new AlumnoFragment();
+                AsignacionesFragment asignacionesFragment = new AsignacionesFragment();
+                asignacionesFragment.setArguments(datosCursos);
+                return asignacionesFragment;
         }
         return null;
     }
@@ -64,7 +60,7 @@ public class FragmentsAdapters extends FragmentPagerAdapter {
             case 1:
                 return "Noticias";
             case 2:
-                return "Extras";
+                return "Asignaciones";
         }
         return null;
     }

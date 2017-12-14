@@ -42,7 +42,7 @@ public class NoticiasFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_noticias, container, false);
+     /*   View view =  inflater.inflate(R.layout.fragment_noticias, container, false);
         listaArticulos = view.findViewById(R.id.listaArticulos);
         lottieAnimationView = view.findViewById(R.id.animacionDescarga);
 
@@ -59,9 +59,9 @@ public class NoticiasFragment extends Fragment {
 
         }catch (Exception e){
             Log.i("Error en pagina ", e.getMessage());
-        }
+        }*/
 
-        return view;
+        return null;
     }
 
 
@@ -115,6 +115,7 @@ public class NoticiasFragment extends Fragment {
                     Articulos.add(new Articulo(
                             tituloArticulo,
                             infoArticulo,
+                            rutaImagen,
                             rutaImagen
                     ));
                 }

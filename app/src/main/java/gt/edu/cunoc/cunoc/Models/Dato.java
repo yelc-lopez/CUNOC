@@ -13,19 +13,21 @@ import android.os.Parcelable;
 public class Dato implements Parcelable {
 
     private Bitmap imagen;
-    private String titulo, detalle;
+    private String titulo, detalle, rutaImagen;
 
 
-    public Dato(Bitmap imagen, String titulo, String detalle) {
+    public Dato(Bitmap imagen, String titulo, String detalle, String rutaImagen) {
         this.imagen = imagen;
         this.titulo = titulo;
         this.detalle = detalle;
+        this.rutaImagen = rutaImagen;
     }
 
     protected Dato(Parcel in) {
         imagen = (Bitmap) in.readValue(Bitmap.class.getClassLoader());
         titulo = in.readString();
         detalle = in.readString();
+        rutaImagen = in.readString();
     }
 
     public static final Creator<Dato> CREATOR = new Creator<Dato>() {
@@ -50,6 +52,7 @@ public class Dato implements Parcelable {
         dest.writeValue(imagen);
         dest.writeString(titulo);
         dest.writeString(detalle);
+        dest.writeString(rutaImagen);
     }
 
     public Bitmap getImagen() {
@@ -74,5 +77,13 @@ public class Dato implements Parcelable {
 
     public void setDetalle(String detalle) {
         this.detalle = detalle;
+    }
+
+    public String getRutaImagen() {
+        return rutaImagen;
+    }
+
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
     }
 }

@@ -40,6 +40,11 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp" />
 
+            <TextView
+                android:id="@+id/direccionURlImagen"
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
+
         </RelativeLayout>
 
 </android.support.v7.widget.CardView>

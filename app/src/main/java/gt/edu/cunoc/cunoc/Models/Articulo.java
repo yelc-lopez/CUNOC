@@ -5,12 +5,13 @@ package gt.edu.cunoc.cunoc.Models;
  */
 
 public class Articulo {
-    String titulo, contenido, imagen;
+    String titulo, contenido, imagen, rutaImagen;
 
-    public Articulo(String titulo, String contenido, String imagen) {
+    public Articulo(String titulo, String contenido, String imagen, String rutaImagen) {
         this.titulo = titulo;
         this.contenido = contenido;
         this.imagen = imagen;
+        this.rutaImagen = rutaImagen;
     }
 
     public String getTitulo() {
@@ -35,5 +36,13 @@ public class Articulo {
 
     public void setImagen(String imagen) {
         this.imagen = imagen;
+    }
+
+    public String getRutaImagen() {
+        return rutaImagen;
+    }
+
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
     }
 }

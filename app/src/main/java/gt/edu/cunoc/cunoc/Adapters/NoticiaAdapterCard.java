@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Explode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -57,6 +58,7 @@ public class NoticiaAdapterCard extends RecyclerView.Adapter<NoticiaAdapterCard.
         String rutaImagen = tarjeta.getImagen();
         Glide.with(origenActivity).load(rutaImagen).into(holder.imagen);
         holder.detalle.setText(tarjeta.getContenido());
+        holder.urlImagen.setText(tarjeta.getRutaImagen());
     }
 
     @Override
@@ -67,7 +69,7 @@ public class NoticiaAdapterCard extends RecyclerView.Adapter<NoticiaAdapterCard.
     public class tarjetaViewHoldier extends RecyclerView.ViewHolder{
 
         ImageView imagen;
-        TextView titulo,detalle;
+        TextView titulo,detalle,urlImagen;
         Bundle datos = new Bundle();
 
         public tarjetaViewHoldier(final View itemView) {
@@ -76,6 +78,7 @@ public class NoticiaAdapterCard extends RecyclerView.Adapter<NoticiaAdapterCard.
             imagen = (ImageView) itemView.findViewById(R.id.imagenTarjeta);
             titulo = (TextView) itemView.findViewById(R.id.tituloTarjeta);
             detalle = (TextView) itemView.findViewById(R.id.detalle_Tarjeta);
+            urlImagen = itemView.findViewById(R.id.direccionURlImagen);
 
             imagen.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -85,7 +88,15 @@ public class NoticiaAdapterCard extends RecyclerView.Adapter<NoticiaAdapterCard.
                     imagen.buildDrawingCache();
                     Bitmap bmap = imagen.getDrawingCache();
 
-                    Dato dato = new Dato(bmap,titulo.getText().toString(),detalle.getText().toString());
+                    Dato dato = new Dato(bmap,titulo.getText().toString(),detalle.getText().toString(),"");
+                    nextActivity(DetallesNoticiaActivity.class, imagen, dato);
+                }
+            });
+
+            titulo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Dato dato = new Dato(null,titulo.getText().toString(),detalle.getText().toString(),urlImagen.getText().toString());
                     nextActivity(DetallesNoticiaActivity.class, imagen, dato);
                 }
             });
@@ -95,19 +106,24 @@ public class NoticiaAdapterCard extends RecyclerView.Adapter<NoticiaAdapterCard.
 
 
     public void nextActivity(Class activity, View view, Dato dato){
-        Intent intent = new Intent(origenActivity,activity);
+        try{
+            Intent intent = new Intent(origenActivity,activity);
 
-        if  (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            Explode explode = new Explode();
-            explode.setDuration(1000);
-            explode.setInterpolator(new DecelerateInterpolator());
-            intent.putExtra("bitMap",dato);
-            origenActivity.getWindow().setExitTransition(explode);
-            origenActivity.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(origenActivity,view,origenActivity.getResources().getString(R.string.transitionName)).toBundle());
-        }else{
-            intent.putExtra("bitMap",dato);
-            origenActivity.startActivity(intent);
+            if  (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                Explode explode = new Explode();
+                explode.setDuration(1000);
+                explode.setInterpolator(new DecelerateInterpolator());
+                intent.putExtra("bitMap",dato);
+                origenActivity.getWindow().setExitTransition(explode);
+                origenActivity.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(origenActivity,view,origenActivity.getResources().getString(R.string.transitionName)).toBundle());
+            }else{
+                intent.putExtra("bitMap",dato);
+                origenActivity.startActivity(intent);
+            }
+        }catch (Exception e){
+            Log.i("error intent",e.getMessage());
         }
+
     }
 
     /*

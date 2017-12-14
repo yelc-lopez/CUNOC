@@ -1,10 +1,13 @@
 package gt.edu.cunoc.cunoc;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -50,9 +53,27 @@ public class MainActivity extends AppCompatActivity implements NotasInteractionL
             datosRecividos = getIntent().getExtras();
             Log.i("bundlerecivido",getIntent().getExtras().toString());
 
+            Bundle bundleNotas = new Bundle();
+            bundleNotas.putString("id_usuario",datosRecividos.getString("id_alumno0"));
+            bundleNotas.putString("id_carrera",datosRecividos.getString("id_carrera0"));
+
+            Bundle bundleCursos = new Bundle();
+
+            Log.i("bundleLoguin ",datosRecividos.toString());
+            for (int i = 0; i < datosRecividos.size(); i++) {
+                if (datosRecividos.getString("id_alumno"+i)!=null){
+                    bundleCursos.putString("usuario",datosRecividos.getString("id_alumno"+i));
+                    bundleCursos.putString("id_carrera"+i,datosRecividos.getString("id_carrera"+i));
+                    bundleCursos.putString("nombre_carrera"+i,datosRecividos.getString("nombre_carrera"+i));
+                }
+            }
+
+
+
             mSectionsPagerAdapter = new FragmentsAdapters(getSupportFragmentManager(),
-                    datosRecividos.getString("id_alumno0"),
-                    datosRecividos.getString("id_carrera0"));
+                    bundleNotas,    /* parametors para el fragmentNotas*/
+                    bundleCursos    /* parametros para el fragmentAsignaciones*/);
+
             // Set up the ViewPager with the sections adapter.
 
             mViewPager = (ViewPager) findViewById(R.id.container);
@@ -62,17 +83,10 @@ public class MainActivity extends AppCompatActivity implements NotasInteractionL
             mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
             tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
+            tabLayout.getTabAt(1).select();
+            tabLayout.setTabTextColors(Color.WHITE,getResources().getColor(R.color.colorhint));
+
         }
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         transicionEntrada();
     }
@@ -116,7 +130,25 @@ public class MainActivity extends AppCompatActivity implements NotasInteractionL
         }
 
         if (id == R.id.close_session){
-            startActivity(new Intent(this,LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+            builder.setMessage("Estas seguro de cerrar la sesion")
+                    .setPositiveButton(R.string.si, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            startActivity(new Intent(getApplicationContext(),LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+
+                        }
+                    })
+                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+            builder.create();
+            builder.show();
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -134,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements NotasInteractionL
     public void transicionEntrada(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             getWindow().setEnterTransition(new Slide(Gravity.LEFT).setInterpolator(new DecelerateInterpolator()).setDuration(1000));
+            getWindow().setAllowEnterTransitionOverlap(false);
         }
     }
 

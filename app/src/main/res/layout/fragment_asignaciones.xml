@@ -1,0 +1,32 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="gt.edu.cunoc.cunoc.Fragments.AsignacionesFragment">
+
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TableLayout
+            android:id="@+id/tablaCarreras"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="@dimen/paddingTabla">
+
+        </TableLayout>
+    </HorizontalScrollView>
+
+    <ListView
+        android:id="@+id/listaCursosDisponibles"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:divider="@color/colorPrimary"
+        android:dividerHeight="1dp" />
+
+</LinearLayout>

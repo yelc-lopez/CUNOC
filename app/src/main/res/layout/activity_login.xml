@@ -29,7 +29,7 @@
             android:inputType="text"
             android:paddingLeft="@dimen/space_input"
             android:paddingRight="@dimen/space_input"
-            android:text="269014"
+            android:text="269014-10997"
             android:textColor="@color/colorPrimary"
             android:textColorHint="@color/colorhint"
             android:textSize="24sp" />
@@ -55,6 +55,7 @@
             android:inputType="numberPassword"
             android:paddingLeft="@dimen/space_input"
             android:paddingRight="@dimen/space_input"
+            android:text="789123"
             android:textAlignment="textStart"
             android:textColor="@color/colorPrimary"
             android:textColorHint="@color/colorhint"

@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(String respuesta) {
             try {
 
-                Log.i("respuesta ", respuesta);
+                Log.i("respuesta", respuesta);
                 JSONArray jsonArray = new JSONArray(respuesta);
                 Log.d("job ",jsonArray.toString());
                 Log.d("tamaño",String.valueOf(jsonArray.length()));
